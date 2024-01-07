@@ -1,8 +1,8 @@
 {
-  "name": "plugin-sample-vite",
-  "author": "frostime",
-  "url": "https://github.com/frostime/plugin-sample-vite",
-  "version": "0.3.1",
+  "name": "plugin-web-archive",
+  "author": "pg999w",
+  "url": "TODO",
+  "version": "0.1.0",
   "minAppVersion": "2.11.4",
   "backends": [
     "windows",
@@ -19,23 +19,20 @@
     "desktop-window"
   ],
   "displayName": {
-    "en_US": "Plugin sample with vite",
-    "zh_CN": "插件样例 vite 版"
+    "en_US": "Web Archive Plugin",
+    "zh_CN": "网页存档插件"
   },
   "description": {
-    "en_US": "SiYuan plugin sample with vite",
-    "zh_CN": "使用 vite 开发的思源插件样例"
+    "en_US": "Save links on Web Archive",
+    "zh_CN": "将网页链接存档到互联网图书馆"
   },
   "readme": {
     "en_US": "README.md",
     "zh_CN": "README_zh_CN.md"
   },
   "funding": {
-    "custom": [
-      "https://afdian.net/a/frostime"
-    ]
   },
   "keywords": [
-    "plugin", "sample", "插件样例"
+    "plugin", "link", "web-archive"
   ]
 }
