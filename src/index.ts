@@ -8,8 +8,11 @@ import {
 import "@/index.scss";
 import { SettingUtils } from "./libs/setting-utils";
 import { Client } from "@siyuan-community/siyuan-sdk";
+import { ArchiveAPI } from "./libs/archive";
 
 const STORAGE_NAME = "menu-config";
+const SETTING_ACCESS_KEY = "accessKey";
+const SETTING_SECRET = "secretKey";
 
 export default class PluginSample extends Plugin {
 
@@ -54,12 +57,19 @@ export default class PluginSample extends Plugin {
 
         this.settingUtils = new SettingUtils(this, STORAGE_NAME);
         this.settingUtils.addItem({
-            key: "Input",
+            key: SETTING_ACCESS_KEY,
             value: "",
             type: "textinput",
-            title: "Readonly text",
-            description: "Input description",
+            title: "Access Key",
+            description: "",
         });
+        this.settingUtils.addItem({
+            key: SETTING_SECRET,
+            value: "",
+            type: "textinput",
+            title: "Secret Key",
+            description: "",
+        })
         this.settingUtils.addItem({
             key: "Check",
             value: true,
@@ -102,9 +112,19 @@ export default class PluginSample extends Plugin {
             iconHTML: "",
             label: this.i18n.saveLink,
             click: async () => {
-                showMessage("TODO: " + this.settingUtils.get("Input"))
-                console.log(detail.element.getAttribute("data-href"))
+                const archiveAPI = new ArchiveAPI(this.settingUtils.get(SETTING_ACCESS_KEY), this.settingUtils.get(SETTING_SECRET));
+                const url = detail.element.getAttribute("data-href")
+                const result = await archiveAPI.saveUrl(url);
+                console.log(result)
             }
         });
+        detail.menu.addItem({
+            iconHTML: '',
+            label: "进入 Web Archive",
+            click: () => {
+                const url = detail.element.getAttribute("data-href")
+                window.open("http://web.archive.org/web/" + url);
+            },
+        })
     }
 }
