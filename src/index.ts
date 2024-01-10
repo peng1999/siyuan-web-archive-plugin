@@ -8,6 +8,23 @@ const STORAGE_NAME = "menu-config";
 const SETTING_ACCESS_KEY = "accessKey";
 const SETTING_SECRET = "secretKey";
 
+async function checkStatus(job_id: string, api: ArchiveAPI) {
+    while (true) {
+        const status = await api.getStatus(job_id);
+        switch (status.status) {
+            case "success":
+                showMessage(status.original_url + "上传成功");
+                return;
+            case "error":
+                showMessage("上传失败：" + status.message ?? "unknown error");
+                return;
+            case "pending":
+                await new Promise((resolve) => setTimeout(resolve, 1000));
+                break;
+        }
+    }
+}
+
 export default class PluginSample extends Plugin {
     private isMobile: boolean;
     private settingUtils: SettingUtils;
@@ -44,14 +61,14 @@ export default class PluginSample extends Plugin {
             value: "",
             type: "textinput",
             title: "Access Key",
-            description: "",
+            description: this.i18n.accessKeyDesc,
         });
         this.settingUtils.addItem({
             key: SETTING_SECRET,
             value: "",
             type: "textinput",
             title: "Secret Key",
-            description: "",
+            description: this.i18n.accessKeyDesc,
         });
         this.settingUtils.addItem({
             key: "Check",
@@ -100,8 +117,15 @@ export default class PluginSample extends Plugin {
                     this.settingUtils.get(SETTING_SECRET)
                 );
                 const url = detail.element.getAttribute("data-href");
-                const result = await archiveAPI.saveUrl(url);
-                console.log(result);
+                try {
+                    const result = await archiveAPI.saveUrl(url);
+                    showMessage("开始存档")
+                    console.log(result);
+                    setTimeout(() => checkStatus(result.job_id, archiveAPI), 1000);
+                } catch (e) {
+                    let message = e instanceof Error ? e.message : "unknown error";
+                    showMessage(`error: ${message}`, 0, "error");
+                }
             },
         });
         detail.menu.addItem({

@@ -1,10 +1,8 @@
 {
     "saveAllLinks": "存档本页全部链接",
     "saveLink": "存档链接",
+    "accessKeyDesc": "登陆 <a href=\"https://archive.org/account/s3.php\">https://archive.org/account/s3.php</a> 获取",
     "helloPlugin": "你好，插件！",
     "byePlugin": "再见，插件！",
-    "name": "思源",
-    "hello": {
-        "makesure": "使用这个模板之前，请阅读<a href=\"https://github.com/siyuan-note/plugin-sample\">官方教程</a>, 确保自己已经理解了插件的基本开发流程。"
-    }
+    "name": "网页存档插件"
 }

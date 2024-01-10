@@ -1,3 +1,6 @@
+import fetch_retry from "fetch-retry";
+const fetch = fetch_retry(global.fetch);
+
 interface ArchiveOptions {
     capture_all?: boolean;
     capture_outlinks?: boolean;
