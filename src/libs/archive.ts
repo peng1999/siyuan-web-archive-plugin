@@ -8,8 +8,8 @@ interface ArchiveOptions {
 
 const defaultOptions: ArchiveOptions = {
     delay_wb_availability: true,
-    skip_first_archive: true
-}
+    skip_first_archive: true,
+};
 
 interface ArchiveResponse {
     url: string;
@@ -22,7 +22,7 @@ type CommonFields = {
 };
 
 type SuccessResponse = CommonFields & {
-    status: 'success';
+    status: "success";
     original_url: string;
     screenshot?: string;
     timestamp: string;
@@ -31,11 +31,11 @@ type SuccessResponse = CommonFields & {
 };
 
 type PendingResponse = CommonFields & {
-    status: 'pending';
+    status: "pending";
 };
 
 type ErrorResponse = CommonFields & {
-    status: 'error';
+    status: "error";
     exception?: string;
     status_ext?: string;
     message?: string;
@@ -53,7 +53,7 @@ class ArchiveAPI {
     }
 
     private buildPostData(options: ArchiveOptions): URLSearchParams {
-        Object.keys(defaultOptions).forEach(key => {
+        Object.keys(defaultOptions).forEach((key) => {
             if (options[key] === undefined) {
                 options[key] = defaultOptions[key];
             }
@@ -61,20 +61,20 @@ class ArchiveAPI {
 
         let data = new URLSearchParams();
         for (let [key, value] of Object.entries(options)) {
-            data.set(key, value ? '1' : '0');
+            data.set(key, value ? "1" : "0");
         }
         return data;
     }
 
     public async saveUrl(url: string, options: ArchiveOptions = {}): Promise<ArchiveResponse> {
         const data = this.buildPostData(options);
-        data.set('url', url);
+        data.set("url", url);
 
-        const response = await fetch('https://web.archive.org/save', {
-            method: 'POST',
+        const response = await fetch("https://web.archive.org/save", {
+            method: "POST",
             headers: {
-                'Accept': 'application/json',
-                'Authorization': `LOW ${this.accessKey}:${this.secret}`,
+                Accept: "application/json",
+                Authorization: `LOW ${this.accessKey}:${this.secret}`,
             },
             body: data,
         });
@@ -84,10 +84,10 @@ class ArchiveAPI {
 
     public async getStatus(job_id: string): Promise<StatusResponse> {
         const response = await fetch(`https://web.archive.org/save/status/${job_id}`, {
-            method: 'GET',
+            method: "GET",
             headers: {
-                'Accept': 'application/json',
-                'Authorization': `LOW ${this.accessKey}:${this.secret}`,
+                Accept: "application/json",
+                Authorization: `LOW ${this.accessKey}:${this.secret}`,
             },
         });
 

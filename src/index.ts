@@ -1,10 +1,4 @@
-import {
-    Plugin,
-    showMessage,
-    getFrontend,
-    getBackend,
-    IMenuBaseDetail,
-} from "siyuan";
+import { Plugin, showMessage, getFrontend, getBackend, IMenuBaseDetail } from "siyuan";
 import "@/index.scss";
 import { SettingUtils } from "./libs/setting-utils";
 import { Client } from "@siyuan-community/siyuan-sdk";
@@ -15,10 +9,9 @@ const SETTING_ACCESS_KEY = "accessKey";
 const SETTING_SECRET = "secretKey";
 
 export default class PluginSample extends Plugin {
-
-    private isMobile: boolean
-    private settingUtils: SettingUtils
-    private client: Client
+    private isMobile: boolean;
+    private settingUtils: SettingUtils;
+    private client: Client;
 
     async onload() {
         console.log("loading plugin-web-archive");
@@ -26,7 +19,7 @@ export default class PluginSample extends Plugin {
         const frontEnd = getFrontend();
         this.isMobile = frontEnd === "mobile" || frontEnd === "browser-mobile";
 
-        this.client = new Client({}, "fetch")
+        this.client = new Client({}, "fetch");
 
         // 图标的制作参见帮助文档
         this.addIcons(`<symbol id="iconFace" viewBox="0 0 32 32">
@@ -41,8 +34,8 @@ export default class PluginSample extends Plugin {
             title: this.i18n.saveAllLinks,
             position: "left",
             callback: () => {
-                showMessage("Clicked")
-            }
+                showMessage("Clicked");
+            },
         });
 
         this.settingUtils = new SettingUtils(this, STORAGE_NAME);
@@ -59,7 +52,7 @@ export default class PluginSample extends Plugin {
             type: "textinput",
             title: "Secret Key",
             description: "",
-        })
+        });
         this.settingUtils.addItem({
             key: "Check",
             value: true,
@@ -75,11 +68,11 @@ export default class PluginSample extends Plugin {
             description: "Select description",
             options: {
                 1: "Option 1",
-                2: "Option 2"
-            }
+                2: "Option 2",
+            },
         });
 
-        this.eventBus.on("open-menu-link", this.linkMenuEvent)
+        this.eventBus.on("open-menu-link", this.linkMenuEvent);
 
         console.log(this.i18n.helloPlugin);
     }
@@ -102,19 +95,22 @@ export default class PluginSample extends Plugin {
             iconHTML: "",
             label: this.i18n.saveLink,
             click: async () => {
-                const archiveAPI = new ArchiveAPI(this.settingUtils.get(SETTING_ACCESS_KEY), this.settingUtils.get(SETTING_SECRET));
-                const url = detail.element.getAttribute("data-href")
+                const archiveAPI = new ArchiveAPI(
+                    this.settingUtils.get(SETTING_ACCESS_KEY),
+                    this.settingUtils.get(SETTING_SECRET)
+                );
+                const url = detail.element.getAttribute("data-href");
                 const result = await archiveAPI.saveUrl(url);
-                console.log(result)
-            }
+                console.log(result);
+            },
         });
         detail.menu.addItem({
-            iconHTML: '',
+            iconHTML: "",
             label: "进入 Web Archive",
             click: () => {
-                const url = detail.element.getAttribute("data-href")
+                const url = detail.element.getAttribute("data-href");
                 window.open("http://web.archive.org/web/" + url);
             },
-        })
-    }
+        });
+    };
 }
