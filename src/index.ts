@@ -9,20 +9,23 @@ const SETTING_ACCESS_KEY = "accessKey";
 const SETTING_SECRET = "secretKey";
 
 async function checkStatus(job_id: string, api: ArchiveAPI) {
-    while (true) {
+    for (let i = 0; i < 100; i++) {
         const status = await api.getStatus(job_id);
         switch (status.status) {
             case "success":
+                console.log(status);
                 showMessage(status.original_url + "上传成功");
                 return;
             case "error":
-                showMessage("上传失败：" + status.message ?? "unknown error");
+                console.log(status);
+                showMessage("上传失败：" + status.message ?? "unknown error", 6000, "error");
                 return;
             case "pending":
-                await new Promise((resolve) => setTimeout(resolve, 1000));
+                await new Promise((resolve) => setTimeout(resolve, 5000));
                 break;
         }
     }
+    console.log("timeout");
 }
 
 export default class PluginSample extends Plugin {
@@ -119,8 +122,11 @@ export default class PluginSample extends Plugin {
                 const url = detail.element.getAttribute("data-href");
                 try {
                     const result = await archiveAPI.saveUrl(url);
-                    showMessage("开始存档")
                     console.log(result);
+                    if ("status" in result) {
+                        throw Error("存档失败:" + result.message);
+                    }
+                    showMessage("开始存档");
                     setTimeout(() => checkStatus(result.job_id, archiveAPI), 1000);
                 } catch (e) {
                     let message = e instanceof Error ? e.message : "unknown error";

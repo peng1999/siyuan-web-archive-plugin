@@ -1,5 +1,7 @@
 import fetch_retry from "fetch-retry";
-const fetch = fetch_retry(global.fetch);
+const fetch = fetch_retry(global.fetch, {
+    retryDelay: (attempt) => Math.pow(2, attempt) * 1000
+});
 
 interface ArchiveOptions {
     capture_all?: boolean;
@@ -41,7 +43,7 @@ type ErrorResponse = CommonFields & {
     status: "error";
     exception?: string;
     status_ext?: string;
-    message?: string;
+    message: string;
 };
 
 type StatusResponse = SuccessResponse | PendingResponse | ErrorResponse;
@@ -69,7 +71,7 @@ class ArchiveAPI {
         return data;
     }
 
-    public async saveUrl(url: string, options: ArchiveOptions = {}): Promise<ArchiveResponse> {
+    public async saveUrl(url: string, options: ArchiveOptions = {}): Promise<ArchiveResponse | ErrorResponse> {
         const data = this.buildPostData(options);
         data.set("url", url);
 
