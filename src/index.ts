@@ -7,6 +7,8 @@ import { ArchiveAPI } from "./libs/archive";
 const STORAGE_NAME = "menu-config";
 const SETTING_ACCESS_KEY = "accessKey";
 const SETTING_SECRET = "secretKey";
+const SETTING_ARCHIVE_OUTLINK = "outlink";
+const SETTING_ARCHIVE_SCREENSHOT = "screenshot";
 
 async function checkStatus(job_id: string, api: ArchiveAPI) {
     for (let i = 0; i < 100; i++) {
@@ -74,22 +76,18 @@ export default class PluginSample extends Plugin {
             description: this.i18n.accessKeyDesc,
         });
         this.settingUtils.addItem({
-            key: "Check",
-            value: true,
+            key: SETTING_ARCHIVE_OUTLINK,
+            value: false,
             type: "checkbox",
-            title: "Checkbox text",
-            description: "Check description",
+            title: "存档出链",
+            description: "让 Wayback Machine 同时保存网页的出链",
         });
         this.settingUtils.addItem({
-            key: "Select",
-            value: 1,
-            type: "select",
-            title: "Readonly text",
-            description: "Select description",
-            options: {
-                1: "Option 1",
-                2: "Option 2",
-            },
+            key: SETTING_ARCHIVE_SCREENSHOT,
+            value: false,
+            type: "checkbox",
+            title: "存档截图",
+            description: "让 Wayback Machine 同时保存网页的截图",
         });
 
         this.eventBus.on("open-menu-link", this.linkMenuEvent);
@@ -119,9 +117,13 @@ export default class PluginSample extends Plugin {
                     this.settingUtils.get(SETTING_ACCESS_KEY),
                     this.settingUtils.get(SETTING_SECRET)
                 );
+                const archiveOptions = {
+                    capture_outlinks: this.settingUtils.get(SETTING_ARCHIVE_OUTLINK),
+                    capture_screenshot: this.settingUtils.get(SETTING_ARCHIVE_SCREENSHOT),
+                };
                 const url = detail.element.getAttribute("data-href");
                 try {
-                    const result = await archiveAPI.saveUrl(url);
+                    const result = await archiveAPI.saveUrl(url, archiveOptions);
                     console.log(result);
                     if ("status" in result) {
                         throw Error("存档失败:" + result.message);
