@@ -3,7 +3,7 @@ const fetch = fetch_retry(global.fetch, {
     retryDelay: (attempt) => Math.pow(2, attempt) * 1000
 });
 
-interface ArchiveOptions {
+export interface ArchiveOptions {
     capture_all?: boolean;
     capture_outlinks?: boolean;
     capture_screenshot?: boolean;
