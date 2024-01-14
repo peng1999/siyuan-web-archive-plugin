@@ -76,8 +76,10 @@ export default class PluginSample extends Plugin {
     async onunload() {
         console.log(this.i18n.byePlugin);
         await this.settingUtils.save();
-        showMessage("Goodbye SiYuan Plugin");
-        console.log("onunload");
+    }
+
+    openSetting() {
+        this.setting.open("网页存档插件")
     }
 
     private setupSettings() {
