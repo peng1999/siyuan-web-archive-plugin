@@ -1,8 +1,16 @@
 {
-    "saveAllLinks": "存档本页全部链接",
+    "saveAllLinks": "存档全部链接",
     "saveLink": "存档链接",
+    "accessWebArchive": "访问网页存档",
     "accessKeyDesc": "登陆 <a href=\"https://archive.org/account/s3.php\">https://archive.org/account/s3.php</a> 获取",
-    "helloPlugin": "你好，插件！",
-    "byePlugin": "再见，插件！",
+    "archiveOutlink": "存档出链",
+    "archiveOutlinkDesc": "让 Wayback Machine 同时保存网页的出链",
+    "archiveScreenshot": "存档截图",
+    "archiveScreenshotDesc": "让 Wayback Machine 同时保存网页的截图",
+    "archiveFailed_": "存档失败：",
+    "archiveSuccess_": "存档成功：",
+    "archiveStart": "开始存档",
+    "helloPlugin": "你好，网页存档插件！",
+    "byePlugin": "再见，网页存档插件！",
     "name": "网页存档插件"
 }

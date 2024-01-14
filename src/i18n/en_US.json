@@ -1,7 +1,16 @@
 {
-    "saveAllLinks": "Archive all links on this page",
+    "saveAllLinks": "Archive all links",
     "saveLink": "Archive link",
-    "accessKeyDesc": "Get your access key from <a href=\"https://archive.org/account/s3.php\">https://archive.org/account/s3.php</a>",
-    "helloPlugin": "Hello, Plugin!",
-    "byePlugin": "Bye, Plugin!"
+    "accessWebArchive": "Access web archive",
+    "accessKeyDesc": "Log in to <a href=\"https://archive.org/account/s3.php\">https://archive.org/account/s3.php</a> to obtain",
+    "archiveOutlink": "Archive outlinks",
+    "archiveOutlinkDesc": "Let Wayback Machine also save the outlinks of the webpage",
+    "archiveScreenshot": "Archive screenshot",
+    "archiveScreenshotDesc": "Let Wayback Machine also save a screenshot of the webpage",
+    "archiveFailed_": "Archiving failed: ",
+    "archiveSuccess_": "Archiving successful: ",
+    "archiveStart": "Start archiving",
+    "helloPlugin": "Hello, Web Archiving Plugin!",
+    "byePlugin": "Goodbye, Web Archiving Plugin!",
+    "name": "Web Archiving Plugin"
 }

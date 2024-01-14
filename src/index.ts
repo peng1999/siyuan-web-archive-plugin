@@ -10,26 +10,6 @@ const SETTING_SECRET = "secretKey";
 const SETTING_ARCHIVE_OUTLINK = "outlink";
 const SETTING_ARCHIVE_SCREENSHOT = "screenshot";
 
-async function checkStatus(job_id: string, api: ArchiveAPI) {
-    for (let i = 0; i < 60; i++) {
-        const status = await api.getStatus(job_id);
-        switch (status.status) {
-            case "success":
-                console.log(status);
-                showMessage(status.original_url + "上传成功");
-                return;
-            case "error":
-                console.log(status);
-                showMessage("上传失败：" + status.message ?? "unknown error", 6000, "error");
-                return;
-            case "pending":
-                await new Promise((resolve) => setTimeout(resolve, 5000));
-                break;
-        }
-    }
-    console.log("timeout");
-}
-
 export default class PluginSample extends Plugin {
     private isMobile: boolean;
     private settingUtils: SettingUtils;
@@ -43,7 +23,6 @@ export default class PluginSample extends Plugin {
 
         this.client = new Client({}, "fetch");
 
-        // 图标的制作参见帮助文档
         this.addIcons(`<symbol id="iconLinkOpen" viewBox="0 0 32 32">
 <g transform="matrix(2,0,0,2,0,0)"><path d="M10,0C9.447,0 9,0.447 9,1C9,1.553 9.447,2 10,2L12.584,2L6.294,8.294C5.903,8.684 5.903,9.319 6.294,9.709C6.684,10.1 7.319,10.1 7.709,9.709L14,3.416L14,6C14,6.553 14.447,7 15,7C15.553,7 16,6.553 16,6L16,1C16,0.447 15.553,0 15,0L10,0ZM2.5,1C1.119,1 0,2.119 0,3.5L0,13.5C0,14.881 1.119,16 2.5,16L12.5,16C13.881,16 15,14.881 15,13.5L15,10C15,9.447 14.553,9 14,9C13.447,9 13,9.447 13,10L13,13.5C13,13.775 12.775,14 12.5,14L2.5,14C2.225,14 2,13.775 2,13.5L2,3.5C2,3.225 2.225,3 2.5,3L6,3C6.553,3 7,2.553 7,2C7,1.447 6.553,1 6,1L2.5,1Z" style="fill-rule:nonzero;"/></g>
 </symbol>
@@ -79,7 +58,7 @@ export default class PluginSample extends Plugin {
     }
 
     openSetting() {
-        this.setting.open("网页存档插件")
+        this.setting.open(this.i18n.name);
     }
 
     private setupSettings() {
@@ -102,15 +81,15 @@ export default class PluginSample extends Plugin {
             key: SETTING_ARCHIVE_OUTLINK,
             value: false,
             type: "checkbox",
-            title: "存档出链",
-            description: "让 Wayback Machine 同时保存网页的出链",
+            title: this.i18n.archiveOutlink,
+            description: this.i18n.archiveOutlinkDesc,
         });
         this.settingUtils.addItem({
             key: SETTING_ARCHIVE_SCREENSHOT,
             value: false,
             type: "checkbox",
-            title: "存档截图",
-            description: "让 Wayback Machine 同时保存网页的截图",
+            title: this.i18n.archiveScreenshot,
+            description: this.i18n.archiveScreenshotDesc,
         });
     }
 
@@ -125,7 +104,7 @@ export default class PluginSample extends Plugin {
         });
         detail.menu.addItem({
             icon: "iconLinkOpen",
-            label: "打开 Web Archive",
+            label: this.i18n.accessWebArchive,
             click: () => {
                 const url = detail.element.dataset.href;
                 window.open("http://web.archive.org/web/" + url);
@@ -134,10 +113,9 @@ export default class PluginSample extends Plugin {
     };
 
     private iconMenuEvent = (menu: EventMenu, blockId: string[]) => {
-        console.log(blockId);
         menu.addItem({
             icon: "iconArchive",
-            label: "存档所有链接",
+            label: this.i18n.saveAllLinks,
             click: async () => {
                 for (const id of blockId) {
                     const resp = await this.client.getBlockDOM({ id });
@@ -170,14 +148,38 @@ export default class PluginSample extends Plugin {
             const result = await archiveAPI.saveUrl(url, archiveOptions);
             console.log(result);
             if ("status" in result) {
-                throw Error("存档失败:" + result.message);
+                throw Error(this.i18n.archiveFailed_ + result.message);
             }
-            console.log(`start saving url: ${url}`)
-            showMessage("开始存档");
-            setTimeout(() => checkStatus(result.job_id, archiveAPI), 5000);
+            console.log(`start saving url: ${url}`);
+            showMessage(this.i18n.archiveStart);
+            setTimeout(() => this.checkStatus(result.job_id, archiveAPI), 5000);
         } catch (e) {
             let message = e instanceof Error ? e.message : "unknown error";
-            showMessage(`error: ${message}`, 0, "error");
+            showMessage(this.i18n.archiveFailed_ + message, 0, "error");
         }
+    };
+
+    private checkStatus = async (job_id: string, api: ArchiveAPI) => {
+        for (let i = 0; i < 60; i++) {
+            const status = await api.getStatus(job_id);
+            switch (status.status) {
+                case "success":
+                    console.log(status);
+                    showMessage(this.i18n.archvieSucess_ + status.original_url);
+                    return;
+                case "error":
+                    console.log(status);
+                    showMessage(
+                        this.i18n.archiveFailed_ + status.message ?? "unknown error",
+                        6000,
+                        "error"
+                    );
+                    return;
+                case "pending":
+                    await new Promise((resolve) => setTimeout(resolve, 5000));
+                    break;
+            }
+        }
+        console.log("timeout");
     };
 }
