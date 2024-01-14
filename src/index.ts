@@ -1,4 +1,4 @@
-import { Plugin, showMessage, getFrontend, getBackend, IMenuBaseDetail, EventMenu } from "siyuan";
+import { Plugin, showMessage, getFrontend, IMenuBaseDetail, EventMenu } from "siyuan";
 import "@/index.scss";
 import { SettingUtils } from "./libs/setting-utils";
 import { Client } from "@siyuan-community/siyuan-sdk";

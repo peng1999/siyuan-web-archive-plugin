@@ -1,7 +1,7 @@
 {
   "name": "plugin-web-archive",
   "author": "pg999w",
-  "url": "TODO",
+  "url": "https://github.com/peng1999/siyuan-web-archive-plugin",
   "version": "0.1.0",
   "minAppVersion": "2.11.4",
   "backends": [
@@ -15,16 +15,17 @@
     "zh_CN": "网页存档插件"
   },
   "description": {
-    "en_US": "Save links on Web Archive",
-    "zh_CN": "将网页链接存档到互联网图书馆"
+    "en_US": "Save links in Wayback Machine",
+    "zh_CN": "将网页链接存档到 Wayback Machine"
   },
   "readme": {
     "en_US": "README.md",
     "zh_CN": "README_zh_CN.md"
   },
   "funding": {
+    "github": "peng1999"
   },
   "keywords": [
-    "plugin", "link", "web-archive"
+    "plugin", "link", "web-archive", "wayback-machine"
   ]
 }
