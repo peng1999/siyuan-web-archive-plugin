@@ -3,7 +3,7 @@
   "author": "pg999w",
   "url": "https://github.com/peng1999/siyuan-web-archive-plugin",
   "version": "0.1.0",
-  "minAppVersion": "2.11.4",
+  "minAppVersion": "2.12.1",
   "backends": [
     "all"
   ],
