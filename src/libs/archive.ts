@@ -1,6 +1,6 @@
 import fetch_retry from "fetch-retry";
 const fetch = fetch_retry(global.fetch, {
-    retryDelay: (attempt) => Math.pow(2, attempt) * 1000
+    retryDelay: (attempt) => Math.pow(2, attempt) * 1000,
 });
 
 export interface ArchiveOptions {
@@ -26,6 +26,11 @@ type CommonFields = {
     resources?: string[];
 };
 
+type CommonErrorFields = {
+    status: "error";
+    status_ext: string;
+};
+
 type SuccessResponse = CommonFields & {
     status: "success";
     original_url: string;
@@ -39,10 +44,13 @@ type PendingResponse = CommonFields & {
     status: "pending";
 };
 
-type ErrorResponse = CommonFields & {
-    status: "error";
-    exception?: string;
-    status_ext?: string;
+type ErrorResponse = CommonFields &
+    CommonErrorFields & {
+        exception?: string;
+        message: string;
+    };
+
+type ErrorResponseNoJob = (CommonErrorFields | {}) & {
     message: string;
 };
 
@@ -71,7 +79,10 @@ class ArchiveAPI {
         return data;
     }
 
-    public async saveUrl(url: string, options: ArchiveOptions = {}): Promise<ArchiveResponse | ErrorResponse> {
+    public async saveUrl(
+        url: string,
+        options: ArchiveOptions = {}
+    ): Promise<ArchiveResponse | ErrorResponseNoJob> {
         const data = this.buildPostData(options);
         data.set("url", url);
 

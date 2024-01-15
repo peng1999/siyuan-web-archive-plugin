@@ -147,7 +147,7 @@ export default class PluginSample extends Plugin {
         try {
             const result = await archiveAPI.saveUrl(url, archiveOptions);
             console.log(result);
-            if ("status" in result) {
+            if (!("job_id" in result)) {
                 throw Error(this.i18n.archiveFailed_ + result.message);
             }
             console.log(`start saving url: ${url}`);
