@@ -1,5 +1,5 @@
 import fetch_retry from "fetch-retry";
-const fetch = fetch_retry(global.fetch, {
+const fetch = fetch_retry(globalThis.fetch, {
     retryDelay: (attempt) => Math.pow(2, attempt) * 1000,
 });
 

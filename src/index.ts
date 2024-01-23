@@ -120,7 +120,7 @@ export default class PluginSample extends Plugin {
                 for (const id of blockId) {
                     const resp = await this.client.getBlockDOM({ id });
                     const parser = new DOMParser();
-                    const dom = parser.parseFromString(resp.data.dom, "application/xml");
+                    const dom = parser.parseFromString(resp.data.dom, "text/html");
                     const links = dom.querySelectorAll("[data-href]");
                     if (links.length > 0) {
                         for (const link of links) {
@@ -165,7 +165,7 @@ export default class PluginSample extends Plugin {
             switch (status.status) {
                 case "success":
                     console.log(status);
-                    showMessage(this.i18n.archvieSucess_ + status.original_url);
+                    showMessage(this.i18n.archiveSucess_ + status.original_url);
                     return;
                 case "error":
                     console.log(status);
