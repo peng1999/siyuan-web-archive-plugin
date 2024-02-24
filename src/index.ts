@@ -165,7 +165,7 @@ export default class PluginSample extends Plugin {
             switch (status.status) {
                 case "success":
                     console.log(status);
-                    showMessage(this.i18n.archiveSucess_ + status.original_url);
+                    showMessage(this.i18n.archiveSuccess_ + status.original_url);
                     return;
                 case "error":
                     console.log(status);
